@@ -29,6 +29,47 @@ describe Hand do
     end
   end
 
+  describe "::is_flush?" do
+    it "should return true if flush" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:five, :diamonds),
+               Card.new(:queen, :diamonds),
+               Card.new(:nine, :diamonds),
+               Card.new(:ace, :diamonds)]
+      expect(Hand.is_flush?(cards)).to eq(true)
+    end
+
+    it "should return false for incorrect flush" do
+      cards = [Card.new(:two, :hearts),
+               Card.new(:five, :diamonds),
+               Card.new(:queen, :diamonds),
+               Card.new(:nine, :diamonds),
+               Card.new(:ace, :diamonds)]
+      expect(Hand.is_flush?(cards)).to eq(false)
+    end
+  end
+
+  describe "::is_straight?" do
+    it "should return true if straight" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:three, :hearts),
+               Card.new(:four, :spades),
+               Card.new(:five, :clubs),
+               Card.new(:six, :diamonds)]
+      expect(Hand.is_straight?(cards)).to eq(true)
+    end
+
+    it "should return false for incorrect straight" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:three, :hearts),
+               Card.new(:ace, :spades),
+               Card.new(:five, :clubs),
+               Card.new(:six, :diamonds)]
+      expect(Hand.is_straight?(cards)).to eq(false)
+    end
+  end
+
+
 
   describe "#show_value" do
     # it "should return the hash value of a royal flush" do

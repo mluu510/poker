@@ -45,17 +45,17 @@ class Hand
     if is_flush && is_straight
       return { hand_type: :straight_fush, cards: self.cards }
     elsif is_four_of_a_kind
-      return {hand_type: :four_of_a_kind, cards: self.cards }
+      return { hand_type: :four_of_a_kind, cards: self.cards }
     elsif full_house
-      return {hand_type: :full_house, cards: self.cards}
+      return { hand_type: :full_house, cards: self.cards }
     elsif is_three_of_a_kind
-      return {hand_type: :three_of_a_kind, cards: self.cards}
+      return { hand_type: :three_of_a_kind, cards: self.cards }
     elsif is_two_pair
-      return {hand_type: :two_pair, cards: self.cards}
+      return { hand_type: :two_pair, cards: self.cards }
     elsif is_one_pair
-      return {hand_type: :one_pair, cards: self.cards}
+      return { hand_type: :one_pair, cards: self.cards }
     elsif is_high_card
-      return {hand_type: :high_card, cards: self.cards}
+      return { hand_type: :high_card, cards: self.cards }
     end
 
   end
@@ -63,11 +63,19 @@ class Hand
   def self.is_flush?(cards)
     first_card_suit = cards.first.suit
     cards.each do |card|
-      card.suit != first_card_suit
-      return false
+      return false if card.suit != first_card_suit
     end
     true
   end
 
+  def self.is_straight?(cards)
+    sorted_cards = cards.sort
+    sorted_cards.each_with_index do |this_card, idx|
+      next_card = sorted_cards[idx+1]
+      next if next_card.nil?
+      return false if this_card.value_num + 1 != next_card.value_num
+    end
+    true
+  end
 
 end

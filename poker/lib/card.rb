@@ -36,12 +36,31 @@ class Card
     "#{value}#{suit}"
   end
 
+  def value_num
+    case @value
+    when :jack
+      11
+    when :queen
+      12
+    when :king
+      13
+    when :ace
+      14
+    else
+      VALUE_STRINGS[self.value].to_i
+    end
+  end
+
   def self.suits
     SUIT_STRINGS
   end
 
   def self.values
     VALUE_STRINGS
+  end
+
+  def <=>(other_card)
+    self.value_num <=> other_card.value_num
   end
 
 end
