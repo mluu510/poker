@@ -29,6 +29,12 @@ describe Hand do
     end
   end
 
+  let(:junk_cards) { [Card.new(:deuce, :diamonds),
+                     Card.new(:three, :hearts),
+                     Card.new(:ace, :spades),
+                     Card.new(:five, :clubs),
+                     Card.new(:six, :diamonds)] }
+
   describe "::is_flush?" do
     it "should return true if flush" do
       cards = [Card.new(:deuce, :diamonds),
@@ -40,12 +46,7 @@ describe Hand do
     end
 
     it "should return false for incorrect flush" do
-      cards = [Card.new(:two, :hearts),
-               Card.new(:five, :diamonds),
-               Card.new(:queen, :diamonds),
-               Card.new(:nine, :diamonds),
-               Card.new(:ace, :diamonds)]
-      expect(Hand.is_flush?(cards)).to eq(false)
+      expect(Hand.is_flush?(junk_cards)).to eq(false)
     end
   end
 
@@ -60,16 +61,84 @@ describe Hand do
     end
 
     it "should return false for incorrect straight" do
-      cards = [Card.new(:deuce, :diamonds),
-               Card.new(:three, :hearts),
-               Card.new(:ace, :spades),
-               Card.new(:five, :clubs),
-               Card.new(:six, :diamonds)]
-      expect(Hand.is_straight?(cards)).to eq(false)
+      expect(Hand.is_straight?(junk_cards)).to eq(false)
     end
   end
 
+  describe "::is_four_of_a_kind?" do
+    it "should return true if four of a kind" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:deuce, :hearts),
+               Card.new(:deuce, :spades),
+               Card.new(:deuce, :clubs),
+               Card.new(:three, :diamonds)]
+      expect(Hand.is_four_of_a_kind?(cards)).to eq(true)
+    end
 
+    it "should return false for incorrect four of a kind" do
+      expect(Hand.is_four_of_a_kind?(junk_cards)).to eq(false)
+    end
+  end
+
+  describe "::is_full_house?" do
+    it "should return true if full house" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:deuce, :hearts),
+               Card.new(:deuce, :spades),
+               Card.new(:three, :clubs),
+               Card.new(:three, :diamonds)]
+      expect(Hand.is_full_house?(cards)).to eq(true)
+    end
+
+    it "should return false for incorrect full house" do
+      expect(Hand.is_full_house?(junk_cards)).to eq(false)
+    end
+  end
+
+  describe "::is_three_of_a_kind?" do
+    it "should return true if three of a kind" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:deuce, :hearts),
+               Card.new(:deuce, :spades),
+               Card.new(:three, :clubs),
+               Card.new(:three, :diamonds)]
+      expect(Hand.is_three_of_a_kind?(cards)).to eq(true)
+    end
+
+    it "should return false for incorrect three of a kind" do
+      expect(Hand.is_three_of_a_kind?(junk_cards)).to eq(false)
+    end
+  end
+
+  describe "::is_two_pairs" do
+    it "should return true if two pairs" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:deuce, :hearts),
+               Card.new(:four, :spades),
+               Card.new(:three, :clubs),
+               Card.new(:three, :diamonds)]
+      expect(Hand.is_two_pairs?(cards)).to eq(true)
+    end
+
+    it "should return false for incorrect two pairs" do
+      expect(Hand.is_two_pairs?(junk_cards)).to eq(false)
+    end
+  end
+
+  describe "::is_one_pair" do
+    it "should return true if one pair" do
+      cards = [Card.new(:deuce, :diamonds),
+               Card.new(:deuce, :hearts),
+               Card.new(:four, :spades),
+               Card.new(:three, :clubs),
+               Card.new(:five, :diamonds)]
+      expect(Hand.is_one_pair?(cards)).to eq(true)
+    end
+
+    it "should return false for incorrect one pair" do
+      expect(Hand.is_one_pair?(junk_cards)).to eq(false)
+    end
+  end
 
   describe "#show_value" do
     # it "should return the hash value of a royal flush" do

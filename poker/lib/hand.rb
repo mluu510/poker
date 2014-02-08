@@ -37,27 +37,29 @@ class Hand
     is_four_of_a_kind = Hand.is_four_of_a_kind?(self.cards)
     is_full_house = Hand.is_full_house?(self.cards)
     is_three_of_a_kind = Hand.is_three_of_a_kind?(self.cards)
-    is_two_pair = Hand.is_two_pair?(self.cards)
+    is_two_pair = Hand.is_two_pairs?(self.cards)
     is_one_pair = Hand.is_one_pair?(self.cards)
-    is_high_card = Hand.is_high_card?(self.cards)
 
     # Find straight flush
     if is_flush && is_straight
       return { hand_type: :straight_fush, cards: self.cards }
     elsif is_four_of_a_kind
       return { hand_type: :four_of_a_kind, cards: self.cards }
-    elsif full_house
+    elsif is_full_house
       return { hand_type: :full_house, cards: self.cards }
+    elsif is_flush
+      return { hand_type: :flush, cards: self.cards }
+    elsif is_straight
+      return { hand_type: :straight, cards: self.cards }
     elsif is_three_of_a_kind
       return { hand_type: :three_of_a_kind, cards: self.cards }
     elsif is_two_pair
       return { hand_type: :two_pair, cards: self.cards }
     elsif is_one_pair
       return { hand_type: :one_pair, cards: self.cards }
-    elsif is_high_card
+    else
       return { hand_type: :high_card, cards: self.cards }
     end
-
   end
 
   def self.is_flush?(cards)
@@ -78,4 +80,46 @@ class Hand
     true
   end
 
+  def self.is_four_of_a_kind?(cards)
+    card_hash = Hand.calculate_card_hash(cards)
+    return true if card_hash.values.include?(4)
+    false
+  end
+
+  def self.is_full_house?(cards)
+    card_hash = Hand.calculate_card_hash(cards)
+    return true if card_hash.values.include?(3) && card_hash.values.include?(2)
+    false
+  end
+
+  def self.is_three_of_a_kind?(cards)
+    card_hash = Hand.calculate_card_hash(cards)
+    return true if card_hash.values.include?(3)
+    false
+  end
+
+  def self.is_two_pairs?(cards)
+    card_hash = self.calculate_card_hash(cards)
+    sum = 0
+    card_hash.each do |key, value|
+      sum +=1 if card_hash[key] == 2
+    end
+    return true if sum == 2
+    false
+  end
+
+  def self.is_one_pair?(cards)
+    card_hash = self.calculate_card_hash(cards)
+    return true if card_hash.values.include?(2)
+    false
+  end
+
+  private
+  def self.calculate_card_hash(cards)
+    card_hash = Hash.new(0)
+    cards.each do |card|
+      card_hash[card.value] += 1
+    end
+    card_hash
+  end
 end
